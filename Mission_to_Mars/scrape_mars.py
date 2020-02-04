@@ -8,6 +8,7 @@ import requests
 def init_browser():
     executable_path = {"executable_path": "chromedriver.exe"}
     return Browser("chrome", **executable_path, headless=False)
+mars_info = {}
 
 # NASA Mars News
 def scrape():
@@ -24,21 +25,22 @@ def scrape():
 
     news_title = slide_element.find("div", class_="content_title").get_text()
     news_p = slide_element.find("div", class_="article_teaser_body").get_text()
-    print(news_title)
-    print(news_p)
+    mars_info["news_title"] = news_title
+    mars_info["news_paragraph"] = news_p
 
     # JPL Space Images - Featured Image
     jpl_url = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
     browser.visit(jpl_url)
     browser.click_link_by_partial_text("FULL IMAGE")
-    expand = browser.find_by_css("a.fancybox-expand")
+    #expand = browser.find_by_css("a.fancybox-expand")
+    
 
     jpl_html = browser.html
     jpl_soup = BeautifulSoup(jpl_html, "html.parser")
 
     img_relative = jpl_soup.find("img", class_="fancybox-image")["src"]
     featured_image_url = f"https://www.jpl.nasa.gov{img_relative}"
-    print(featured_image_url)
+    mars_info["featured_image_url"] = featured_image_url
 
     # Mars Weather
     mars_weather_url = ('https://twitter.com/marswxreport?lang=en')
@@ -54,7 +56,7 @@ def scrape():
         weather_mars.append(tweet)
 
     mars_weather = weather_mars[0]
-    print(mars_weather)
+    mars_info["mars_weather"] = mars_weather
 
     # Mars Facts
     mars_facts_url = "https://space-facts.com/mars/"
@@ -68,7 +70,7 @@ def scrape():
 
     facts_html = df.to_html()
     facts_html = facts_html.replace("\n","")
-    facts_html
+    mars_info["mars_facts"] = facts_html
 
     # Mars Hemisphere
     hemisphere_image_urls = []
@@ -150,3 +152,9 @@ def scrape():
     hemisphere_image_urls.append(syrtris_hem)
     hemisphere_image_urls.append(valles_marineris_hem)
     hemisphere_image_urls
+
+    mars_info["hemispheres_info"] = hemisphere_image_urls
+
+    browser.quit()
+
+    return mars_info
