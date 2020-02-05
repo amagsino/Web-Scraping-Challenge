@@ -46,7 +46,7 @@ def scrape():
     weather_soup = bs(weather_html, "html.parser")
     # print(weathersoup.prettify())
 
-    mars_tweets = [weather_soup.find_all('p', class_="TweetTextSize"), weathersoup.find_all('span', class_="css-901oao css-16my406 r-1qd0xha r-ad9z0x r-bcqeeo r-qvutc0")]
+    mars_tweets = [weather_soup.find_all('p', class_="TweetTextSize"), weather_soup.find_all('span', class_="css-901oao css-16my406 r-1qd0xha r-ad9z0x r-bcqeeo r-qvutc0")]
 
     for tweets in mars_tweets:
         mars_tweet = tweets
